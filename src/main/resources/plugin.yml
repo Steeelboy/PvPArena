@@ -2,3 +2,14 @@ name: PvPArena
 version: '${project.version}'
 main: me.ilciab.pvparena.Main
 api-version: '1.21'
+author: ilciab
+
+commands:
+  fight:
+    description: Your description
+    usage: /fight <player>
+
+permissions:
+  fight.use:
+    description: Allows players to randomize the owner of the crown.
+    default: op
