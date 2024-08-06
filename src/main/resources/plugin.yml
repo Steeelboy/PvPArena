@@ -1,0 +1,4 @@
+name: PvPArena
+version: '${project.version}'
+main: me.ilciab.pvparena.Main
+api-version: '1.21'
