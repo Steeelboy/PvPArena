@@ -15,17 +15,17 @@ public class Commands implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)){
+        if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.RED + "Can't execute this message from the console");
             return true;
         }
         Player playerSender = ((Player) sender).getPlayer();
-        if(!playerSender.hasPermission("fight.use")) {
-            playerSender.sendMessage(ChatColor.RED +  "You don't have the permission to execute this command");
+        if (!playerSender.hasPermission("fight.use")) {
+            playerSender.sendMessage(ChatColor.RED + "You don't have the permission to execute this command");
             return true;
         }
 
-        if(Fight.isFighting()){
+        if (Fight.isFighting()) {
             playerSender.sendMessage("Another fight is already going on");
             return true;
         }

@@ -6,11 +6,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 @Getter
-public class PlayerData{
+public class PlayerData {
 
-    private ItemStack[] contents;
-    private int level;
-    private float xp;
+    private final ItemStack[] contents;
+    private final int level;
+    private final float xp;
 
     public PlayerData(ItemStack[] contents, int level, float xp) {
         this.contents = contents;
