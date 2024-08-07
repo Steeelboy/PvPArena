@@ -14,6 +14,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Fight implements Listener {
 
@@ -51,7 +52,10 @@ public class Fight implements Listener {
             player.getInventory().setContents(playerData.getContents());
             player.setExp(playerData.getXp());
             player.setLevel(playerData.getLevel());
+            player.setHealth(20);
+            player.setSaturation(20);
         }
+        fighters.clear();
     }
 
     @EventHandler
@@ -62,24 +66,15 @@ public class Fight implements Listener {
             return;
         Player damaged = (Player) event.getEntity();
         Player damager = (Player) event.getDamager();
+
+        if(!fighters.containsKey(damaged))
+            return;
         if ((damaged.getHealth() - event.getDamage()) <= 0) {
             //Killed
             event.setCancelled(true);
-            Location bedSpawnLocation = damaged.getBedSpawnLocation();
-            if(bedSpawnLocation != null)
-                damaged.teleport(bedSpawnLocation);
-            else
-                damaged.teleport()
-            damaged.setHealth(20);
-        }
-        Player player = (Player) event.getEntity();
-        if (fighters.containsKey(((Player) event.getEntity()).getPlayer()))
-            endFight(event.getEntity().getKiller(), event.getEntity());
-        if (player.getHealth() < 1) {
-            event.setCancelled(true);
-            player.teleport(player.getWorld().getSpawnLocation());
-
-            fighters.clear();
+            Location bedSpawnLocation = damaged.getRespawnLocation();
+            damaged.teleport(Objects.requireNonNullElseGet(bedSpawnLocation, () -> damaged.getWorld().getSpawnLocation()));
+            endFight(damager, damaged);
         }
     }
 }
