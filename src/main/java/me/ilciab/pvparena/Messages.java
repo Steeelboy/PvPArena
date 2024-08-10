@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.Objects;
 
 public class Messages {
+
     private static final Plugin plugin = Main.getInstance();
 
     @Getter

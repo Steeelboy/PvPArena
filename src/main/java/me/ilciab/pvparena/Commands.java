@@ -7,11 +7,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.checkerframework.framework.qual.IgnoreInWholeProgramInference;
 
 public class Commands implements CommandExecutor {
 
     private static Player inviter = null;
     private static Player invited = null;
+    private static boolean shouldExpire;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -39,6 +41,8 @@ public class Commands implements CommandExecutor {
 
         if (subcommand.equals("accept") || subcommand.equals("decline")) {
 
+            shouldExpire = false;
+
             if (playerSender != invited) {
                 playerSender.sendMessage(ChatColor.RED + "You have no pending invitations");
                 return true;
@@ -58,6 +62,7 @@ public class Commands implements CommandExecutor {
                 }
             }
         } else {
+            inviter = playerSender;
             invited = Bukkit.getPlayer(subcommand);
 
             if (invited == null) {
@@ -65,18 +70,27 @@ public class Commands implements CommandExecutor {
                 return true;
             }
 
+            if (invited.equals(inviter)){
+                inviter.sendMessage(ChatColor.RED + "Cannot invite yourself to a fight");
+                return true;
+            }
 
-            inviter = playerSender;
             inviter.sendMessage(ChatColor.GOLD + invited.getName() + ChatColor.RESET + " has been invited, he has " + Main.getFightInviteExpirationTime() + " seconds to accept or decline");
             invited.sendMessage(ChatColor.GOLD + inviter.getName() + ChatColor.RESET + " has challenged you to a fight, do /fight accept or decline");
+
+            shouldExpire = true;
 
             new BukkitRunnable() {
                 @Override
                 public void run() {
+                    if(!shouldExpire)
+                        return;
+                    if(Fight.isFighting())
+                        return;
                     invited = null;
                     inviter.sendMessage(ChatColor.RED + "Invite time has expired");
                 }
-            }.runTaskLater(Main.getInstance(), 200L);
+            }.runTaskLater(Main.getInstance(), Main.getFightInviteExpirationTime() * 20L);
         }
 
         return true;

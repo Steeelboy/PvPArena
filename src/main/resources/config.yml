@@ -1,2 +1,4 @@
 #fight invitation expiration time (seconds)
 fight-expiration: 20
+player1-arena-location: "-1681.5 66 -161.5 -90 0"
+player2-arena-location: "-1665.5 66 -161.5 90 0"

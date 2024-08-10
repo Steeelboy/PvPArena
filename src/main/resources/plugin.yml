@@ -11,5 +11,5 @@ commands:
 
 permissions:
   fight.use:
-    description: Allows players to randomize the owner of the crown.
+    description: Allows players to start a fight.
     default: op
